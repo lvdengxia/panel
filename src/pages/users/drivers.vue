@@ -71,7 +71,7 @@
             </span>
             <el-popover
               placement="right"
-              title="今日支付人数"
+              title="今日已派单"
               trigger="hover"
               width="200"
             >
@@ -85,7 +85,7 @@
           </div>
         </div>
         <div class="he-statistics__item flex-sub">
-          <div class="he-statistics__title">今日客单价</div>
+          <div class="he-statistics__title">今日司机客单价</div>
           <div>
             <span class="he-statistics__number">
               ¥{{ statistics.average_amount_today.all }}
@@ -109,7 +109,6 @@
         </div>
       </div>
     </div>
-    <!--
     <el-form class="le-card" style="margin-bottom: 24px" label-width="96px">
       <div style="display: flex; flex-wrap: wrap">
         <el-form-item label="关键词">
@@ -118,60 +117,6 @@
             v-model="keyword.search"
             @keyup.enter.native="getSearch"
           >
-          </el-input>
-        </el-form-item>
-        <el-form-item label="用户来源">
-          <el-select
-            placeholder="请选择"
-            v-model="keyword.source"
-            @change="getSearch"
-          >
-            <el-option value="" label="全部"> </el-option>
-            <el-option value="weapp" label="微信小程序"> </el-option>
-            <el-option value="wechat" label="公众号"> </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="用户标签">
-          <div
-            class="le-users-label flex justify-between align-center"
-            action="getSearch"
-            module="users"
-            title="用户标签筛选"
-            width="704"
-            v-popup.chooseLabel="edit"
-          >
-            <div class="he-select__content flex">
-              <template v-if="edit.label.length === 0">
-                <div class="le-users-label__placeholder">请选择</div>
-              </template>
-              <div
-                class="he-select__tag"
-                v-for="(item, index) in edit.label"
-                :key="index"
-              >
-                <span>{{ item.name }}</span>
-                <i
-                  class="el-tag__close el-icon-close"
-                  @click.stop="delLabel(item, index)"
-                ></i>
-              </div>
-            </div>
-            <i class="el-icon-arrow-down"></i>
-          </div>
-        </el-form-item>
-        <el-form-item label="消费次数">
-          <el-input
-            v-model="keyword.buy_number_start"
-            @keyup.enter.native="getSearch"
-          >
-            <template slot="append"> 次 </template>
-          </el-input>
-          <span class="he-to"> 至 </span>
-          <el-input
-            v-model="keyword.buy_number_end"
-            @keyup.enter.native="getSearch"
-          >
-            <template slot="append"> 次 </template>
           </el-input>
         </el-form-item>
         <el-form-item label="注册时间">
@@ -189,25 +134,6 @@
             placeholder="结束时间"
             type="datetime"
             v-model="keyword.created_time_end"
-            value-format="timestamp"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="上次消费时间">
-          <el-date-picker
-            @change="getSearch"
-            placeholder="开始时间"
-            type="datetime"
-            v-model="keyword.last_buy_time_start"
-            value-format="timestamp"
-          >
-          </el-date-picker>
-          <span class="he-to"> 至 </span>
-          <el-date-picker
-            @change="getSearch"
-            placeholder="结束时间"
-            type="datetime"
-            v-model="keyword.last_buy_time_end"
             value-format="timestamp"
           >
           </el-date-picker>
@@ -233,6 +159,7 @@
         </el-form-item>
       </div>
       <div style="padding-left: 96px">
+        <el-button @click="addDriver" type="primary" >添加</el-button>
         <el-button @click="getSearch" type="primary">筛选</el-button>
         <el-button @click="empty">清空</el-button>
         <el-button @click="exportUsers">导出</el-button>
@@ -247,7 +174,6 @@
         </he-link>
       </div>
     </el-form>
-    -->
     <div class="le-card">
       <div class="le-all-query">
         <el-checkbox
@@ -849,6 +775,11 @@ export default {
           }
         });
     },
+    addDriver(){
+        this.$router.push({
+            path: "/users/editDriver"
+        });
+    }
   },
   filters: {
     getTime: function (time) {

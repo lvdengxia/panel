@@ -475,6 +475,20 @@ export default [
                             hidden: true,
                             icon: "le-icon-user-manage"
                         }
+                    },
+                    {
+                        path: '/users/editDriver',
+                        component: () => import('@/pages/users/editDriver'),
+                        name: 'users_editDriver',
+                        hidden: true,
+                        meta: {
+                            keepAlive: true,
+                            title: '编辑司机',
+                            parentMenu: '/users/users',
+                            activeMenu: '/users/driver',
+                            hidden: true,
+                            icon: "le-icon-user-manage"
+                        }
                     }
                 ]
             },
@@ -742,27 +756,6 @@ export default [
             }
         ]
     },
-    // {
-    //     path: 'finish',
-    //     component: Finish, // Parent router-view
-    //     name: 'finish',
-    //     meta: {
-    //         title: '装修',
-
-    //     },
-    //     redirect: '/finish/index',
-    //     children: [{
-    //         path: '/finish/index',
-    //         component: () => import('@/pages/pages/index'),
-    //         name: 'finish_index2',
-    //         meta: {
-    //             keepAlive: true,
-    //             title: '微页面',
-    //             parentMenu: 'finish',
-    //             icon: ""
-    //         }
-    //     }]
-    // },
     {
         path: '/package',
         component: Package, // Parent router-view
