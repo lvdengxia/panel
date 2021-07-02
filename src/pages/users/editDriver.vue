@@ -15,36 +15,70 @@
             </el-form-item>
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">手机号</span>
-                <el-input v-model="form.name" maxlength="8" show-word-limit></el-input>
+                <el-input v-model="form.mobile" maxlength="8" show-word-limit></el-input>
             </el-form-item>
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">密码</span>
-                <el-input v-model="form.name" maxlength="16" show-word-limit></el-input>
+                <el-input v-model="form.pass"  type="password" maxlength="16"></el-input>
             </el-form-item>
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">车牌号</span>
-                <el-input v-model="form.name">
-                    <!--<template slot="append">-->
-                        <el-select v-model="value" placeholder="请选择">
+                <el-input v-model="form.plate_number">
+                    <template slot="append">
+                        <el-select v-model="form.plate_color" placeholder="请选择">
                             <el-option
-                                    v-for="item in [{value: '选项1',label: '黄金糕'}, {value: '选项2',label: '双皮奶'}]"
+                                    v-for="item in [{value: '1',label: '黄牌'}, {value: '2',label: '蓝牌'}]"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
                             </el-option>
                         </el-select>
-                    <!--</template>-->
+                    </template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">载重</span>
-                <el-input v-model="form.name">
+                <el-input v-model="form.load">
                     <template slot="append">吨</template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">驾驶证</span>
-                <el-input v-model="form.name" maxlength="8" show-word-limit></el-input>
+                <el-row>
+                    <el-col :span="4" class="select-cover__120">
+                        <pictureDialog v-model="form.credentials_front" :limit="1">
+                            <div slot="upload" class="select-cover__120-add">
+                                <i class="le-icon le-icon-add select-cover__120-icon"></i>
+                                <span class="select-cover__120-text">驾驶证正面</span>
+                            </div>
+                            <div slot="preview" slot-scope="scope" class="select-cover__120-edit">
+                                <el-image :src="scope.url" fit="cover"></el-image>
+                                <div class="select-cover__120-tips">
+                                    <span>替换</span> | <span @click.stop="(e)=>form.credentials_front=''">删除</span>
+                                </div>
+                            </div>
+                        </pictureDialog>
+                    </el-col>
+
+                    <el-col :span="4" class="select-cover__120">
+                        <pictureDialog v-model="form.credentials_contrary" :limit="1">
+                            <div slot="upload" class="select-cover__120-add">
+                                <i class="le-icon le-icon-add select-cover__120-icon"></i>
+                                <span class="select-cover__120-text">驾驶证背面</span>
+                            </div>
+                            <div slot="preview" slot-scope="scope" class="select-cover__120-edit">
+                                <el-image :src="scope.url" fit="cover"></el-image>
+                                <div class="select-cover__120-tips">
+                                    <span>替换</span> | <span @click.stop="(e)=>form.credentials_contrary=''">删除</span>
+                                </div>
+                            </div>
+                        </pictureDialog>
+                    </el-col>
+                </el-row>
+            </el-form-item>
+            <el-form-item prop="name">
+                <span slot="label" class="le-form-item__label">备注</span>
+                <el-input type="textarea" v-model="form.desc"></el-input>
             </el-form-item>
         </div>
         <div class="le-cardpin">
@@ -55,11 +89,11 @@
 </template>
 
 <script>
-
+    import vuedraggable from "vuedraggable";
 export default {
-    name: "editLabel",
+    name: "editDriver",
     components: {
-
+        vuedraggable
     },
     data() {
         return {
@@ -69,36 +103,15 @@ export default {
                 ]
             },
             form: {
-                type: 1,
                 name: '',
-                status: 1,
-                conditions_status: 1,
-                conditions_setting: {
-                    shopping_time: {
-                        checked: false,
-                        value: {
-                            start: '',
-                            end: ''
-                        }
-                    },
-                    shopping_group: {
-                        checked: false,
-                        value: []
-                    },
-                    shopping_goods: {
-                        checked: false,
-                        value: []
-                    },
-                    shopping_amount: {
-                        checked: false,
-                        value: ''
-                    },
-                    shopping_number: {
-                        checked: false,
-                        value: ''
-                    }
-                },
-                filter_user: [],
+                mobile: '',
+                pass: '',
+                plate_number: '',
+                plate_color:'',
+                load: 0,
+                credentials_front:'',
+                credentials_contrary:'',
+
             },
             catObject: {
                 cat: [],
@@ -189,76 +202,42 @@ export default {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     _this.loading = true;
-                    if (_this.form.type === 1) {
-                        _this.form.conditions_setting = null;
-                        _this.$delete(_this.form, 'filter_user');
-                        _this.$delete(_this.form, 'conditions_status');
-                        _this.$delete(_this.form, 'status');
-                    } else {
-                        let {shopping_time, shopping_group, shopping_goods, shopping_amount, shopping_number} = _this.form.conditions_setting;
-                        if (!shopping_time.checked && !shopping_amount.checked && !shopping_number.checked && !shopping_goods.checked && !shopping_group.checked) {
-                            _this.loading = false;
-                            _this.$message.error('请至少设置一个打标条件');
-                            return;
-                        }
-                        if (shopping_time.checked) {
-                            let {start, end} = shopping_time.value;
-                            if (!start && !end) {
-                                _this.loading = false;
-                                _this.$message.error('消费时间不能为空');
-                                return;
-                            } else if (!start && end) {
-                                _this.loading = false;
-                                _this.$message.error('消费开始时间不能为空');
-                                return;
-                            } else if (start && !end) {
-                                _this.loading = false;
-                                _this.$message.error('消费结束时间不能为空');
-                                return;
-                            }
-                            if (start >= end) {
-                                _this.loading = false;
-                                _this.$message.error('消费时间开始时间必须小于结束时间');
-                                return;
-                            }
-                        }
-                        if (shopping_number.checked) {
-                            if (!shopping_number.value) {
-                                _this.loading = false;
-                                _this.$message.error('消费次数不能为空');
-                                return;
-                            }
-                        }
-                        if (shopping_amount.checked) {
-                            if (!shopping_amount.value) {
-                                _this.loading = false;
-                                _this.$message.error('消费金额不能为空');
-                                return;
-                            }
-                        }
-                        if (shopping_goods.checked) {
-                            if (shopping_goods.value.length === 0) {
-                                _this.loading = false;
-                                _this.$message.error('购买指定商品不能为空');
-                                return;
-                            }
-                        }
-                        if (shopping_group.checked) {
-                            if (shopping_group.value.length === 0) {
-                                _this.loading = false;
-                                _this.$message.error('购买指定分类不能为空');
-                                return;
-                            }
-                        }
-                        if (shopping_time.checked) {
-                            let {start, end} = shopping_time.value;
-                            start = start + '';
-                            shopping_time.value.start = parseInt(start.substring(0, start.length-3));
-                            end = end + '';
-                            shopping_time.value.end = parseInt(end.substring(0, end.length-3));
-                            _this.form.conditions_setting.shopping_group.value = _this.catObject.result;
-                        }
+                    if (_this.form.name === ''){
+                        _this.loading = false;
+                        _this.$message.error('司机用户名不能为空');
+                        return;
                     }
+                    if (_this.form.mobile === ''){
+                        _this.loading = false;
+                        _this.$message.error('手机号不能为空');
+                        return;
+                    }
+                    if (_this.form.pass === ''){
+                        _this.loading = false;
+                        _this.$message.error('密码不能为空');
+                        return;
+                    }
+                    if (_this.form.plate_number === ''){
+                        _this.loading = false;
+                        _this.$message.error('车牌号不能为空');
+                        return;
+                    }
+                    if (_this.form.load === 0){
+                        _this.loading = false;
+                        _this.$message.error('载重（吨）不能为空');
+                        return;
+                    }
+                    if (_this.form.credentials_front === ''){
+                        _this.loading = false;
+                        _this.$message.error('驾驶证正面不能为空');
+                        return;
+                    }
+                    if (_this.form.credentials_contrary === ''){
+                        _this.loading = false;
+                        _this.$message.error('驾驶证反面不能为空');
+                        return;
+                    }
+
                     if (_this.$route.query.id) {
                         _this.$heshop.userlabel('put', {id: _this.$route.query.id}, _this.form).then(function () {
                             _this.cancel();
@@ -285,10 +264,7 @@ export default {
         },
         cancel: function () {
             this.$router.replace({
-                path: "/users/userLabel",
-                query: {
-                    type: this.form.type
-                }
+                path: "/users/editDriver",
             })
         },
         getDetail: function (id) {
@@ -360,7 +336,7 @@ export default {
         this.loading = false;
         let id = this.$route.query.id;
         let type = this.$route.query.type;
-        await id ? this.getDetail(parseInt(id)) : this.form.type = parseInt(type);
+        await id ? this.getDetail(parseInt(id)) : 0;
     }
 }
 </script>

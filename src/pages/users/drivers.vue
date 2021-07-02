@@ -119,6 +119,62 @@
           >
           </el-input>
         </el-form-item>
+        <el-form-item label="用户标签">
+          <div
+                  class="le-users-label flex justify-between align-center"
+                  action="getSearch"
+                  module="users"
+                  title="用户标签筛选"
+                  width="704"
+                  v-popup.chooseLabel="edit"
+          >
+            <div class="he-select__content flex">
+              <template v-if="edit.label.length === 0">
+                <div class="le-users-label__placeholder">请选择</div>
+              </template>
+              <div
+                      class="he-select__tag"
+                      v-for="(item, index) in edit.label"
+                      :key="index"
+              >
+                <span>{{ item.name }}</span>
+                <i
+                        class="el-tag__close el-icon-close"
+                        @click.stop="delLabel(item, index)"
+                ></i>
+              </div>
+            </div>
+            <i class="el-icon-arrow-down"></i>
+          </div>
+        </el-form-item>
+        <el-form-item label="状态">
+          <div
+                  class="le-users-label flex justify-between align-center"
+                  action="getSearch"
+                  module="users"
+                  title="用户标签筛选"
+                  width="704"
+                  v-popup.chooseLabel="edit"
+          >
+            <div class="he-select__content flex">
+              <template v-if="edit.label.length === 0">
+                <div class="le-users-label__placeholder">请选择</div>
+              </template>
+              <div
+                      class="he-select__tag"
+                      v-for="(item, index) in edit.label"
+                      :key="index"
+              >
+                <span>{{ item.name }}</span>
+                <i
+                        class="el-tag__close el-icon-close"
+                        @click.stop="delLabel(item, index)"
+                ></i>
+              </div>
+            </div>
+            <i class="el-icon-arrow-down"></i>
+          </div>
+        </el-form-item>
         <el-form-item label="注册时间">
           <el-date-picker
             @change="getSearch"
@@ -272,24 +328,21 @@
         <el-table-column label="操作" width="200px">
           <template slot-scope="scope">
             <div class="le-table-edit flex align-center">
-              <span class="le-button-text" @click="router(scope.row.id)"
-              >编辑</span
-              >
+              <span class="le-button-text" @click="router(scope.row.id)">编辑</span>
               <span class="le-line-text"></span>
               <span
-                      class="le-button-text"
-                      action="setLabel"
-                      :id="scope.row.id + '_label'"
-                      module="users"
-                      title="加标签"
-                      width="704"
-                      v-popup.chooseLabel="{
+                class="le-button-text"
+                action="setLabel"
+                :id="scope.row.id + '_label'"
+                module="users"
+                title="加标签"
+                width="704"
+                v-popup.chooseLabel="{
                   label: scope.row.labellog,
                   type: 1,
                   row: scope.row,
                 }"
-              >加标签</span
-              >
+              >加标签</span>
               <span class="le-line-text"></span>
               <span
                       class="le-button-text"
@@ -299,8 +352,7 @@
                       width="857"
                       action="setCoupon"
                       v-popup.chooseCoupon="{ coupons: [], row: scope.row }"
-              >发优惠券</span
-              >
+              >发优惠券</span>
             </div>
           </template>
         </el-table-column>
