@@ -15,7 +15,7 @@
             </el-form-item>
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">手机号</span>
-                <el-input v-model="form.mobile" maxlength="8" show-word-limit></el-input>
+                <el-input v-model="form.mobile" maxlength="11" show-word-limit></el-input>
             </el-form-item>
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">密码</span>
@@ -24,16 +24,16 @@
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">车牌号</span>
                 <el-input v-model="form.plate_number">
-                    <template slot="append">
-                        <el-select v-model="form.plate_color" placeholder="请选择">
-                            <el-option
-                                    v-for="item in [{value: '1',label: '黄牌'}, {value: '2',label: '蓝牌'}]"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </template>
+                    <!--<template slot="append">-->
+                        <!--<el-select v-model="form.plate_color" placeholder="请选择">-->
+                            <!--<el-option-->
+                                    <!--v-for="item in [{value: '1',label: '黄牌'}, {value: '2',label: '蓝牌'}]"-->
+                                    <!--:key="item.value"-->
+                                    <!--:label="item.label"-->
+                                    <!--:value="item.value">-->
+                            <!--</el-option>-->
+                        <!--</el-select>-->
+                    <!--</template>-->
                 </el-input>
             </el-form-item>
             <el-form-item prop="name">
@@ -76,10 +76,10 @@
                     </el-col>
                 </el-row>
             </el-form-item>
-            <el-form-item prop="name">
-                <span slot="label" class="le-form-item__label">备注</span>
-                <el-input type="textarea" v-model="form.desc"></el-input>
-            </el-form-item>
+            <!--<el-form-item prop="name">-->
+                <!--<span slot="label" class="le-form-item__label">备注</span>-->
+                <!--<el-input type="textarea" v-model="form.desc"></el-input>-->
+            <!--</el-form-item>-->
         </div>
         <div class="le-cardpin">
             <el-button :disabled="loading" @click="cancel">取消</el-button>
@@ -89,11 +89,10 @@
 </template>
 
 <script>
-    import vuedraggable from "vuedraggable";
 export default {
     name: "editDriver",
     components: {
-        vuedraggable
+
     },
     data() {
         return {
@@ -107,7 +106,7 @@ export default {
                 mobile: '',
                 pass: '',
                 plate_number: '',
-                plate_color:'',
+                // plate_color:'',
                 load: 0,
                 credentials_front:'',
                 credentials_contrary:'',
@@ -239,7 +238,7 @@ export default {
                     }
 
                     if (_this.$route.query.id) {
-                        _this.$heshop.userlabel('put', {id: _this.$route.query.id}, _this.form).then(function () {
+                        _this.$heshop.users('post', {id: _this.$route.query.id}, _this.form).then(function () {
                             _this.cancel();
                         }).catch(function (error) {
                             _this.loading = false;
@@ -248,8 +247,21 @@ export default {
                             }
                         });
                     } else {
-                        _this.$heshop.users('post', _this.form).then(function () {
-                            _this.cancel();
+                        _this.$heshop.users('post', _this.form).then(function (res) {
+                            _this.loading = false;
+                            if (res.status === 0){
+                                _this.$message.success("添加成功");
+                                _this.form = {
+                                    name: '',
+                                    mobile: '',
+                                    pass: '',
+                                    plate_number: '',
+                                    load: 0,
+                                    credentials_front:'',
+                                    credentials_contrary:'',
+                                };
+                                _this.cancel();
+                            }
                         }).catch(function (error) {
                             _this.loading = false;
                             if (error.status === 403) {
@@ -269,7 +281,7 @@ export default {
         },
         getDetail: function (id) {
             let _this = this;
-            this.$heshop.userlabel('get', id).then(function (response) {
+            this.$heshop.siji('get', id).then(function (response) {
                _this.form = response;
                if (response.type === 1) return;
                let group = _this.form.conditions_setting.shopping_group.value;

@@ -276,53 +276,57 @@
             <div class="he-text">{{ scope.row.id }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="司机名称" prop="driver_name">
+        <el-table-column label="司机名称" prop="name">
           <template slot-scope="scope">
             <div class="he-text">{{ scope.row.name }}</div>
           </template>
         </el-table-column>
         <el-table-column
                 label="手机号"
-                prop="driver_phone"
+                prop="mobile"
                 min-width="150px">
         </el-table-column>
         <el-table-column
                 label="车牌号"
-                prop="car_number"
+                prop="plate_number"
                 min-width="150px">
         </el-table-column>
         <el-table-column
                 label="注册时间"
-                prop="created_time"
+                prop="add_time"
                 sortable="custom"
                 min-width="150px"
         >
           <template slot-scope="scope">
             <div class="he-text">
-              {{ scope.row.created_time | getTime }}<br />
-              {{ scope.row.created_time | getLast }}
+              {{ scope.row.add_time | getTime }}<br />
+              {{ scope.row.add_time | getLast }}
             </div>
           </template>
         </el-table-column>
         <el-table-column
                 label="最后访问时间"
-                prop="last_visit_time"
+                prop="up_time"
                 sortable="custom"
                 min-width="150px"
         >
           <template slot-scope="scope">
-            <span class="he-text">
-              {{
-                scope.row.statistical
-                  ? scope.row.statistical.last_visit_time
-                  : "" | getTime
-              }}<br />
-              {{
-                scope.row.statistical
-                  ? scope.row.statistical.last_visit_time
-                  : "" | getLast
-              }}
-            </span>
+            <div class="he-text">
+              {{ scope.row.up_time | getTime }}<br />
+              {{ scope.row.up_time | getLast }}
+            </div>
+            <!--<span class="he-text">-->
+              <!--{{-->
+                <!--scope.row.statistical-->
+                  <!--? scope.row.statistical.up_time-->
+                  <!--: "" | getTime-->
+              <!--}}<br />-->
+              <!--{{-->
+                <!--scope.row.statistical-->
+                  <!--? scope.row.statistical.up_time-->
+                  <!--: "" | getLast-->
+              <!--}}-->
+            <!--</span>-->
           </template>
         </el-table-column>
         <el-table-column label="操作" width="200px">
@@ -570,6 +574,8 @@ export default {
       this.page.current = 1;
       this.search(this.keyword);
     },
+
+    // 用户数据 top四部分
     statistical: function () {
       this.$heshop
         .statistical("get", { behavior: "userstatistical" })
@@ -606,25 +612,27 @@ export default {
         keyword.label.push(item.id);
       });
       this.$heshop
-        .search("post", { include: "users" }, { keyword })
+        .siji("get", { keyword })
         .page(this.page.current, this.page.size)
         .then((res) => {
-          let { data, headers } = res;
+          // let { data, headers } = res;
 
-          data = data.map((v) => {
-            v.labellog = v.labellog.map((lab) => {
-              return lab.label;
-            });
-            return v;
-          });
+          // data = data.map((v) => {
+          //   v.labellog = v.labellog.map((lab) => {
+          //     return lab.label;
+          //   });
+          //   return v;
+          // });
 
-          this.list = data;
-          this.page = {
-            current: +headers["x-pagination-current-page"],
-            count: +headers["x-pagination-page-count"],
-            size: +headers["x-pagination-per-page"],
-            total: +headers["x-pagination-total-count"],
-          };
+          // this.list = data.res;
+          //
+          // this.page = {
+          //   current: +headers["x-pagination-current-page"],
+          //   count: +headers["x-pagination-page-count"],
+          //   size: +headers["x-pagination-per-page"],
+          //   total: +headers["x-pagination-total-count"],
+          // };
+            this.list = res.res;
         })
         .catch((err) => {
           console.error(err);
@@ -674,7 +682,7 @@ export default {
     },
     router: function (id) {
       this.$router.push({
-        path: "/users/userData",
+        path: "/users/editDriver",
         query: {
           id: id,
         },
