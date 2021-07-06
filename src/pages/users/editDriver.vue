@@ -283,39 +283,6 @@ export default {
             let _this = this;
             this.$heshop.siji('get', id).then(function (response) {
                _this.form = response;
-               if (response.type === 1) return;
-               let group = _this.form.conditions_setting.shopping_group.value;
-                let {shopping_time} = _this.form.conditions_setting;
-                if (shopping_time.checked) {
-                    let {start, end} = shopping_time.value;
-                    start = start + '000';
-                    end = end + '000';
-                    shopping_time.value.start = parseInt(start);
-                    shopping_time.value.end = parseInt(end);
-                }
-                let data = [];
-                group.forEach(key => {
-                    _this.catTree.forEach(item => {
-                        if (item.id == key.id) {
-                            data.push(item);
-                        }
-                        if (item.children) {
-                            item.children.forEach(item2 => {
-                                if (item2.id == key.id) {
-                                    data.push(item2);
-                                }
-                                if (item2.children) {
-                                    item2.children.forEach(item3 => {
-                                        if (item3.id == key.id) {
-                                            data.push(item3);
-                                        }
-                                    })
-                                }
-                            });
-                        }
-                    });
-                });
-               _this.catObject.result = data;
             });
         },
         checkAmount: function () {
