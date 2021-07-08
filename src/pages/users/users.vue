@@ -397,7 +397,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200px">
+        <el-table-column label="操作" width="270px">
           <template slot-scope="scope">
             <div class="le-table-edit flex align-center">
               <span class="le-button-text" @click="router(scope.row.id)"
@@ -429,6 +429,11 @@
                 v-popup.chooseCoupon="{ coupons: [], row: scope.row }"
                 >发优惠券</span
               >
+              <span class="le-line-text"></span>
+              <span class="le-button-text" @click="setDaili(scope.row.id)" v-if="scope.row.is_daili===0"
+              >设置代理</span>
+              <span class="le-button-text" v-else @click="copyInviteCode(scope.row.is_daili)">
+                复制邀码</span>
             </div>
           </template>
         </el-table-column>
@@ -926,6 +931,27 @@ export default {
           }
         });
     },
+    // 将用户设置成代理
+    setDaili(id){
+        let _this = this;
+        _this.$heshop.daili('put', {id: id}).then(function () {
+            _this.$message.success("设置成功");
+            this.getSearch();
+        }).catch(function (error) {
+            _this.$message.error(error.data.message);
+            return;
+        })
+    },
+    // 复制邀请码
+    copyInviteCode(code) {
+        let copyInput = document.createElement("input");
+        copyInput.value = code;
+        document.body.appendChild(copyInput);//插入body
+        copyInput.select();//选择对象
+        document.execCommand("Copy");//执行复制命令
+        copyInput.remove();//移除
+        this.$message.success("复制成功");
+    }
   },
   filters: {
     getTime: function (time) {
