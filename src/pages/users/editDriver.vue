@@ -13,36 +13,34 @@
                 <span slot="label" class="le-form-item__label">司机姓名</span>
                 <el-input v-model="form.name" maxlength="8" show-word-limit></el-input>
             </el-form-item>
-            <el-form-item prop="name">
+            <el-form-item prop="mobile">
                 <span slot="label" class="le-form-item__label">手机号</span>
                 <el-input v-model="form.mobile" maxlength="11" show-word-limit></el-input>
             </el-form-item>
-            <el-form-item prop="name">
+            <el-form-item prop="pass">
                 <span slot="label" class="le-form-item__label">密码</span>
                 <el-input v-model="form.pass"  type="password" maxlength="16"></el-input>
             </el-form-item>
-            <el-form-item prop="name">
+            <el-form-item prop="plate_number">
                 <span slot="label" class="le-form-item__label">车牌号</span>
-                <el-input v-model="form.plate_number">
-                    <template slot="append">
-                        <el-select v-model="form.plate_group" placeholder="请选择">
-                            <el-option
-                                    v-for="item in [{value: '1',label: '黄牌'}, {value: '2',label: '蓝牌'}]"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </template>
+                <el-input clearable v-model="form.plate_number" class="he-searchInput">
+                    <el-select v-model="form.plate_group" slot="prepend" placeholder="请选择">
+                        <el-option
+                                v-for="item in [{value: '1',label: '黄牌'}, {value: '2',label: '蓝牌'}]"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-input>
             </el-form-item>
-            <el-form-item prop="name">
+            <el-form-item prop="load">
                 <span slot="label" class="le-form-item__label">载重</span>
                 <el-input v-model="form.load">
                     <template slot="append">吨</template>
                 </el-input>
             </el-form-item>
-            <el-form-item prop="name">
+            <el-form-item prop="credentials_front">
                 <span slot="label" class="le-form-item__label">驾驶证</span>
                 <el-row>
                     <el-col :span="12" class="select-cover__120">
@@ -76,9 +74,9 @@
                     </el-col>
                 </el-row>
             </el-form-item>
-            <el-form-item prop="name">
+            <el-form-item>
                 <span slot="label" class="le-form-item__label">备注</span>
-                <el-input type="textarea" v-model="form.desc"></el-input>
+                <el-input type="textarea" v-model="form.remarks"></el-input>
             </el-form-item>
         </div>
         <div class="le-cardpin">
@@ -98,7 +96,22 @@ export default {
         return {
             rules: {
                 name: [
-                    {required: true, message: '请输入标签名称', trigger: 'blur'},
+                    {required: true, message: '请输入司机名称', trigger: 'blur'},
+                ],
+                mobile: [
+                    {required: true, message: '请输入手机号', trigger: 'blur'},
+                ],
+                pass: [
+                    {required: true, message: '请输入密码', trigger: 'blur'},
+                ],
+                plate_number :[
+                    {required: true, message: '请输入车牌号', trigger: 'blur'},
+                ],
+                load:[
+                    {required: true, message: '请输入车牌号', trigger: 'blur'},
+                ],
+                credentials_front:[
+                    {required: true, message: '请输入上传驾驶证正面', trigger: 'change'},
                 ]
             },
             form: {
@@ -335,11 +348,16 @@ export default {
     width: 280px;
 }
 
-.el-select{
+/*.le-matter /deep/ .el-select{*/
+    /*width: 100px;*/
+/*}*/
+
+
+.le-matter /deep/ .el-input--suffix{
     width: 100px;
 }
 
 .le-matter /deep/.he-searchInput {
-    width:447px;
+    width:280px;
 }
 </style>
