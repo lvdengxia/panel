@@ -45,7 +45,7 @@
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">驾驶证</span>
                 <el-row>
-                    <el-col :span="4" class="select-cover__120">
+                    <el-col :span="12" class="select-cover__120">
                         <pictureDialog v-model="form.credentials_front" :limit="1">
                             <div slot="upload" class="select-cover__120-add">
                                 <i class="le-icon le-icon-add select-cover__120-icon"></i>
@@ -60,7 +60,7 @@
                         </pictureDialog>
                     </el-col>
 
-                    <el-col :span="4" class="select-cover__120">
+                    <el-col :span="12" class="select-cover__120">
                         <pictureDialog v-model="form.credentials_contrary" :limit="1">
                             <div slot="upload" class="select-cover__120-add">
                                 <i class="le-icon le-icon-add select-cover__120-icon"></i>
@@ -330,6 +330,10 @@ export default {
 
 <style scoped lang="scss">
 @import "./css/editLabel.less";
+
+.el-row,.el-textarea{
+    width: 280px;
+}
 
 .el-select{
     width: 100px;
