@@ -292,6 +292,21 @@
                 min-width="150px">
         </el-table-column>
         <el-table-column
+                label="车牌颜色"
+                prop="plate_group"
+                min-width="150px">
+          <template slot-scope="scope">
+            <div class="he-text" v-if="scope.row.plate_group === '1'">黄牌</div>
+            <div class="he-text" v-else-if="scope.row.plate_group === '2'">蓝牌</div>
+            <div class="he-text" v-else>未知</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+                label="备注"
+                prop="remarks"
+                min-width="150px">
+        </el-table-column>
+        <el-table-column
                 label="注册时间"
                 prop="add_time"
                 sortable="custom"
@@ -329,7 +344,7 @@
             <!--</span>-->
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200px">
+        <el-table-column label="操作" width="120px">
           <template slot-scope="scope">
             <div class="le-table-edit flex align-center">
               <span class="le-button-text" @click="router(scope.row.id)">编辑</span>
@@ -337,7 +352,7 @@
               <span class="le-button-text"
                     @click="deleteDriver(scope.row.id)"
               >删除</span>
-              <span class="le-line-text"></span>
+              <!--<span class="le-line-text"></span>-->
               <!--<span-->
                       <!--class="le-button-text"-->
                       <!--:id="scope.row.id + '_coupon'"-->

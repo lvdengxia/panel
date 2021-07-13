@@ -24,16 +24,16 @@
             <el-form-item prop="name">
                 <span slot="label" class="le-form-item__label">车牌号</span>
                 <el-input v-model="form.plate_number">
-                    <!--<template slot="append">-->
-                        <!--<el-select v-model="form.plate_color" placeholder="请选择">-->
-                            <!--<el-option-->
-                                    <!--v-for="item in [{value: '1',label: '黄牌'}, {value: '2',label: '蓝牌'}]"-->
-                                    <!--:key="item.value"-->
-                                    <!--:label="item.label"-->
-                                    <!--:value="item.value">-->
-                            <!--</el-option>-->
-                        <!--</el-select>-->
-                    <!--</template>-->
+                    <template slot="append">
+                        <el-select v-model="form.plate_group" placeholder="请选择">
+                            <el-option
+                                    v-for="item in [{value: '1',label: '黄牌'}, {value: '2',label: '蓝牌'}]"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="name">
@@ -76,10 +76,10 @@
                     </el-col>
                 </el-row>
             </el-form-item>
-            <!--<el-form-item prop="name">-->
-                <!--<span slot="label" class="le-form-item__label">备注</span>-->
-                <!--<el-input type="textarea" v-model="form.desc"></el-input>-->
-            <!--</el-form-item>-->
+            <el-form-item prop="name">
+                <span slot="label" class="le-form-item__label">备注</span>
+                <el-input type="textarea" v-model="form.desc"></el-input>
+            </el-form-item>
         </div>
         <div class="le-cardpin">
             <el-button :disabled="loading" @click="cancel">取消</el-button>
@@ -106,10 +106,11 @@ export default {
                 mobile: '',
                 pass: '',
                 plate_number: '',
-                // plate_color:'',
+                plate_group:'',
                 load: 0,
                 credentials_front:'',
                 credentials_contrary:'',
+                remarks:''
 
             },
             catObject: {
@@ -221,6 +222,11 @@ export default {
                         _this.$message.error('车牌号不能为空');
                         return;
                     }
+                    if (_this.form.plate_group === ''){
+                        _this.loading = false;
+                        _this.$message.error('请选择车牌儿颜色');
+                        return;
+                    }
                     if (_this.form.load === 0){
                         _this.loading = false;
                         _this.$message.error('载重（吨）不能为空');
@@ -256,9 +262,11 @@ export default {
                                     mobile: '',
                                     pass: '',
                                     plate_number: '',
+                                    plate_group: '',
                                     load: 0,
                                     credentials_front:'',
                                     credentials_contrary:'',
+                                    remarks:'',
                                 };
                                 _this.cancel();
                             }
