@@ -212,7 +212,33 @@ export default [
                             icon: "le-icon-goodsExportHistory",
 
                         }
+                    },
+                    {
+                        path: '/goods/transportTemplate',
+                        component: () => import('@/pages/goods/transportTemplate'),
+                        name: 'goods_transportTemplate',
+                        meta: {
+                            keepAlive: true,
+                            title: '搬运模板',
+                            parentMenu: '/goods/goods',
+                            icon: "le-icon-shangpin-guige",
+                            index: '2-9'
+                        }
+                    },
+                    {
+                        path: '/goods/transportTemplateEdit',
+                        component: () => import('@/pages/goods/transportTemplateEdit'),
+                        name: 'goods_transportTemplateEdit',
+                        hidden:true,
+                        meta: {
+                            keepAlive: true,
+                            title: '搬运模板',
+                            parentMenu: '/goods/goods',
+                            icon: "le-icon-shangpin-guige",
+                            index: '2-9-1'
+                        }
                     }
+
                 ]
             },
             {
