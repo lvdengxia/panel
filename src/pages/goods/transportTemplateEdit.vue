@@ -4,7 +4,9 @@
             <el-breadcrumb-item>
                 <a href="javascript:history.back()">搬运模板</a>
             </el-breadcrumb-item>
-            <el-breadcrumb-item>新增搬运模板</el-breadcrumb-item>
+            <el-breadcrumb-item>
+                {{$route.query.id ? '编辑搬运模板' : '新增搬运模板'}}
+            </el-breadcrumb-item>
         </el-breadcrumb>
         <el-form class="le-card"
                  :model="form"
@@ -12,20 +14,20 @@
                  ref="form"
                  v-loading="loading"
                  label-width="164px">
-            <el-form-item label="搬运模板名称" prop="title">
+            <el-form-item label="搬运模板名称" prop="temp_name">
                 <el-input
                         maxlength="15"
                         show-word-limit
-                        v-model="form.title"
+                        v-model="form.temp_name"
                         class="le-input--500"
                         placeholder="请输入搬运模板名称"
                 />
             </el-form-item>
-            <el-form-item label="搬运内容" prop="content" class="le-content">
-                <div class="le-parameter" v-for="(item,index) in form.content" :key="index">
+            <el-form-item label="搬运内容" prop="temp_details" class="le-content">
+                <div class="le-parameter" v-for="(item,index) in form.temp_details" :key="index">
                     <el-form-item label="楼层" label-width="82px" :key="index + '_name'">
                         <el-input
-                                v-model="item.name"
+                                v-model="item.level"
                                 class="le-input--240"
                                 placeholder="请输入楼层">
                             <template slot="append">吨</template>
@@ -34,7 +36,7 @@
                     </el-form-item>
                     <el-form-item label="费用" label-width="82px" :key="index + '_value'">
                         <el-input
-                                v-model="item.value"
+                                v-model="item.money"
                                 class="le-input--240"
                                 placeholder="请输入费用">
                             <template slot="append">元</template>
@@ -69,27 +71,27 @@
         data() {
             return {
                 form: {
-                    title: '',
-                    content: [
+                    temp_name: '',
+                    temp_details: [
                         {
-                            name: '',
-                            value: ''
+                            level: '',
+                            money: ''
                         }
                     ]
                 },
                 rules: {
-                    title: [
+                    temp_name: [
                         {
                             required: true,
                             message: '搬运模板名称不能为空'
                         }
                     ],
-                    content: [
+                    temp_details: [
                         {
                             required: true,
                             validator: (rule, value, callback) => {
                                 for (let i = 0; i < value.length; i++) {
-                                    if (!value[i].value || !value[i].name) {
+                                    if (!value[i].money || !value[i].level) {
                                         callback('搬运楼层或费用不能为空');
                                     }
                                 }
@@ -111,14 +113,14 @@
         },
         methods: {
             pushParameter() {
-                this.form.content.push({
-                    name: '',
-                    value: ''
+                this.form.temp_details.push({
+                    level: '',
+                    money: ''
                 });
             },
             deletionParameter(index) {
-                if (this.form.content.length <= 1) return;
-                this.$delete(this.form.content, index);
+                if (this.form.temp_details.length <= 1) return;
+                this.$delete(this.form.temp_details, index);
             },
             submit() {
                 this.$refs['form'].validate(valid => {
@@ -126,18 +128,19 @@
                         this.loading = true;
                         let method = undefined;
                         if (this.form.id) {
-                            method = 'put';
+                            method = 'post';
                         } else {
                             method = 'post';
                         }
                         let data = this.$heshop.utils.deepClone(this.form);
+                        console.log(data);
                         this.$heshop
-                            .goodsargs(method, data)
+                            .temp(method, data)
                             .then(res => {
                                 this.$message.success('保存成功');
                                 this.loading = false;
                                 this.$router.push({
-                                    path: '/goods/parameterTemplate'
+                                    path: '/goods/transportTemplate'
                                 });
                             })
                             .catch(err => {
@@ -154,9 +157,11 @@
             },
             getDetail(id) {
                 this.$heshop
-                    .goodsargs('get', parseInt(id))
+                    .temp('get', {temp_id:id})
                     .then(res => {
-                        this.form = res;
+                        this.form.temp_name = res.res[0].temp_name;
+                        this.form.id = res.res[0].temp_id;
+                        this.form.temp_details = res.res[0].detail;
                         this.disabled = false;
                     })
                     .catch(error => {

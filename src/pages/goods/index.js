@@ -22,6 +22,7 @@ import editName from "./components/editName";
 import chooseCoupon from "./components/chooseCoupon";
 import groupTemplate from "./components/groupTemplate";
 import selectGroupTemplate from "./components/selectGroupTemplate";
+import chooseTransport from "./components/chooseTransport";
 //初始化变量
 let modules = {};
 
@@ -40,6 +41,7 @@ modules.install = function() {
     Heshop.component("goods", "chooseCoupon", chooseCoupon);
     Heshop.component("goods", "groupTemplate", groupTemplate);
     Heshop.component("goods", "selectGroupTemplate", selectGroupTemplate);
+    Heshop.component("goods", "chooseTransport", chooseTransport);
 };
 
 export default modules;

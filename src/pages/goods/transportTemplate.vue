@@ -14,7 +14,7 @@
             <el-form-item label="搬运模板搜索">
                 <el-input
                         placeholder="输入搬运名称搜索"
-                        v-model="name"
+                        v-model="temp_name"
                         clearable
                         @clear="getList(1)"
                         @keydown.enter.native="getList(1)"
@@ -51,29 +51,29 @@
             >
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column
-                        label="搬运名"
-                        prop="param_name"
-                        min-width="260px"
+                        label="搬运模板名称"
+                        prop="temp_name"
+                        min-width="760px"
                 ></el-table-column>
-                <el-table-column label="搬运值" min-width="746px">
-                    <template slot-scope="scope">
-                        {{ scope.row.param_data.join("; ") }}
-                    </template>
-                </el-table-column>
+                <!--<el-table-column label="搬运值" min-width="746px">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--{{ scope.row.temp_name.join("; ") }}-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column label="操作" min-width="210px">
                     <template slot-scope="scope">
                         <div class="le-table-edit flex align-center">
               <span
                       class="le-button-text"
                       title="编译搬运模板"
-                      @click="editTransportTemplate(scope.row.id, scope.$index)"
+                      @click="editTransportTemplate(scope.row.temp_id, scope.$index)"
                       width="788"
               >编辑</span
               >
                             <span class="le-line-text"></span>
                             <span
                                     class="le-button-text"
-                                    @click="delItem(scope.row.id, scope.$index)"
+                                    @click="delItem(scope.row.temp_id, scope.$index)"
                             >删除</span
                             >
                         </div>
@@ -112,7 +112,7 @@
         data() {
             return {
                 loading: false,
-                name: "",
+                temp_name: "",
                 pagination: {
                     current: 1,
                     count: 1,
@@ -144,18 +144,22 @@
                 let _this = this;
                 this.loading = true;
                 this.$heshop
-                    .goodstemplate("get", {
-                        name: this.name,
+                    .temp("get", {
+                        temp_name: this.temp_name,
                     })
                     .page(current, 15)
                     .then(function (response) {
                         console.log(response);
-                        let {headers, data} = response;
+                        // let {headers, data} = response;
+                        // _this.pagination = {
+                        //     current: +headers["x-pagination-current-page"],
+                        //     count: +headers["x-pagination-page-count"],
+                        // };
                         _this.pagination = {
-                            current: +headers["x-pagination-current-page"],
-                            count: +headers["x-pagination-page-count"],
+                            current: 1,
+                            count: 1,
                         };
-                        _this.list = data;
+                        _this.list = response.res;
                         _this.loading = false;
                     })
                     .catch(function (error) {
@@ -198,7 +202,7 @@
                 })
                     .then(function () {
                         _this.$heshop
-                            .goodstemplate("delete", id)
+                            .temp("delete", {id:id})
                             .then(function () {
                                 _this.$delete(_this.list, index);
                                 if (_this.pagination.current > 1 && _this.list.length === 0) {
@@ -233,7 +237,7 @@
                 })
                     .then(function () {
                         _this.$heshop
-                            .goodstemplate("delete", newArr)
+                            .temp("delete", {ids:newArr})
                             .then(function () {
                                 let num = _this.list.length - newArr.length;
                                 if (_this.pagination.current > 1 && num === 0) {

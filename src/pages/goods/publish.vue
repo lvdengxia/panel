@@ -28,6 +28,9 @@
             <el-tab-pane label="其他设置" name="fifth" :disabled="!(form.status === 0 || form.status >= 4)">
                 <addOther v-model="form" />
             </el-tab-pane>
+            <el-tab-pane label="搬运设置" name="sixth" :disabled="!(form.status === 0 || form.status >= 5)">
+                <addTransport v-model="form" />
+            </el-tab-pane>
         </el-tabs>
         <template v-if="step === 1">
             <goodsEditor v-model="form.body.content"></goodsEditor>
@@ -48,6 +51,7 @@
     </el-form>
 </template>
 <script type="text/javascript">
+import addTransport from "./components/addTransport.vue";
 import addBasic from "./components/addBasic.vue";
 import addPrice from "./components/addPrice.vue";
 import addLogistic from "./components/addLogistic.vue";
@@ -63,6 +67,7 @@ export default {
         addPrice,
         addLogistic,
         addMarketing,
+        addTransport,
         addOther,
         goodsEditor,
         goodsPreview,
@@ -142,6 +147,7 @@ export default {
                 limit_buy_type: "day",
                 unit: "件",
                 coupon: [],
+                transport:''
             },
             loading: false,
         };
