@@ -147,7 +147,7 @@ export default {
                 limit_buy_type: "day",
                 unit: "件",
                 coupon: [],
-                transport:''
+                temp_id:''
             },
             loading: false,
         };
@@ -190,7 +190,9 @@ export default {
                         this.activeName = "fourth";
                     } else if (this.activeName === "fourth") {
                         this.activeName = "fifth";
-                    } else {
+                    }else if (this.activeName === "fifth") {
+                        this.activeName = "sixth";
+                    }  else {
                         this.step = 1;
                     }
                 } else {
@@ -233,6 +235,7 @@ export default {
                         video_cover,
                         videoType,
                         coupon,
+                        temp_id
                     } = _this.form;
                     let behavior = "";
                     let putData = {};
@@ -409,12 +412,23 @@ export default {
                                 services,
                             };
                             break;
+                        case "sixth":
+                            if (!temp_id) {
+                                _this.$message.error("请选择搬运模板！");
+                                return;
+                            }
+                            behavior = "tempsetting";
+                            putData = {
+                                temp_id
+                            };
                     }
                     if (
                         _this.activeName === "second" ||
-                        _this.activeName === "third" ||
+                        _this.activeName === "third"  ||
                         _this.activeName === "fourth" ||
-                        _this.activeName === "fifth"
+                        _this.activeName === "fifth"  ||
+                        _this.activeName === "sixth"
+
                     ) {
                         _this.$heshop
                             .goods("put", { id, behavior }, putData)
