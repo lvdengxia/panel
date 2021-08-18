@@ -4,16 +4,16 @@
             <el-input class="le-search" v-model="search" placeholder="输入搬运模板名称搜索">
                 <el-button slot="append" icon="el-icon-search" @click="querySearchAsync"/>
             </el-input>
-            <el-scrollbar class="le-scrollbar">
-                <el-radio-group v-model="check">
-                    <el-radio
+            <el-scrollbar class="le-scrollbar" ref="scrollbar">
+                <el-checkbox-group v-model="check">
+                    <el-checkbox
                             :label="item.temp_id"
                             @change="selectTransport(index)"
                             :class="['le-radio--item', { active: index === listIndex }]"
                             v-for="(item, index) in showList" :key="index">
                         {{item.temp_name}}
-                    </el-radio>
-                </el-radio-group>
+                    </el-checkbox>
+                </el-checkbox-group>
             </el-scrollbar>
         </div>
         <el-scrollbar class="le-scrollbar le-right flex-sub">
@@ -39,38 +39,24 @@
         data() {
             return {
                 listIndex: -1,
-                check: '',
+                check: [],
                 list: [],
                 search: '',
                 form: {
                     temp_name: '',
                     detail: []
                 },
-                showList: []
+                showList: [],
+                page:1,
             };
         },
         mounted() {
             this.getList();
+            this.handleScroll();
         },
         methods: {
             affirm(e) {
                 let { handleClose } = e;
-                // let outputArray = [];
-                // for (let i = 0; i < this.check.length; i++) {
-                //     for (let j = 0; j < this.list.length; j++) {
-                //         if (this.check[i] === this.list[j].temp_id) {
-                //             outputArray.push(this.list[j]);
-                //         }
-                //     }
-                // }
-                // console.log(outputArray);
-                // this.value = outputArray;
-                // this.$emit('input', {
-                //     result: outputArray
-                // });
-                // console.log(this.value['result']);
-                // this.value['result'].push(this.form);
-                // this.value['disabled'].push(this.form);
                 this.$emit('input', this.check);
                 handleClose();
             },
@@ -103,6 +89,14 @@
                         detail: []
                     };
                 }
+            },
+            handleScroll() {
+                // let scrollbarEl = this.$refs.scrollbar.wrap;
+                // scrollbarEl.onscroll = function(){
+                //     if ( scrollbarEl.scrollTop > 300 ){
+                //         // todo 请求第二页
+                //     }
+                // }
             }
         },
     }

@@ -147,7 +147,7 @@
                     .temp("get", {
                         temp_name: this.temp_name,
                     })
-                    .page(current, 15)
+                    .page(current, 10)
                     .then(function (response) {
                         console.log(response);
                         // let {headers, data} = response;
@@ -156,8 +156,8 @@
                         //     count: +headers["x-pagination-page-count"],
                         // };
                         _this.pagination = {
-                            current: 1,
-                            count: 1,
+                            current: current,
+                            count: Math.ceil(response.count / 10),
                         };
                         _this.list = response.res;
                         _this.loading = false;

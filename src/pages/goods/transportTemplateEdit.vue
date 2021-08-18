@@ -14,44 +14,59 @@
                  ref="form"
                  v-loading="loading"
                  label-width="164px">
-            <el-form-item label="搬运模板名称" prop="temp_name">
-                <el-input
-                        maxlength="15"
-                        show-word-limit
-                        v-model="form.temp_name"
-                        class="le-input--500"
-                        placeholder="请输入搬运模板名称"
-                />
-            </el-form-item>
-            <el-form-item label="搬运内容" prop="temp_details" class="le-content">
-                <div class="le-parameter" v-for="(item,index) in form.temp_details" :key="index">
-                    <el-form-item label="楼层" label-width="82px" :key="index + '_name'">
-                        <el-input
-                                v-model="item.level"
-                                class="le-input--240"
-                                placeholder="请输入楼层">
-                            <template slot="append">吨</template>
-                        </el-input>
-                        <div class="le-prompt-text">示例：-1楼；-2楼；-3楼</div>
-                    </el-form-item>
-                    <el-form-item label="费用" label-width="82px" :key="index + '_value'">
-                        <el-input
-                                v-model="item.money"
-                                class="le-input--240"
-                                placeholder="请输入费用">
-                            <template slot="append">元</template>
-                        </el-input>
-                        <div class="le-prompt-text">示例：5；10；20</div>
-                    </el-form-item>
-                    <div v-if="index > 0" class="le-deletion le-icon le-icon-cha2" @click="deletionParameter(index)"></div>
-                </div>
-            </el-form-item>
 
-            <el-form-item>
-                <el-button @click="pushParameter" plain>
-                    添加搬运
-                </el-button>
-            </el-form-item>
+            <el-steps :active="active" finish-status="success">
+                <el-step title="正常楼梯"></el-step>
+                <el-step title="正常电梯"></el-step>
+                <el-step title="商务楼梯"></el-step>
+                <el-step title="复式电梯"></el-step>
+                <el-step title="正常别墅"></el-step>
+                <el-step title="阁楼别墅"></el-step>
+                <el-step title="地下车库-正常电梯"></el-step>
+                <el-step title="地下车库-复式电梯"></el-step>
+                <el-step title="地下车库-正常别墅"></el-step>
+                <el-step title="地下车库-阁楼别墅"></el-step>
+            </el-steps>
+
+            <div class="box">
+                <el-form-item label="搬运模板名称" prop="temp_name">
+                    <el-input
+                            maxlength="15"
+                            show-word-limit
+                            v-model="form.temp_name"
+                            class="le-input--500"
+                            placeholder="请输入搬运模板名称(例如：商品名称-楼梯类型)"
+                    />
+                </el-form-item>
+                <el-form-item label="搬运内容" prop="temp_details" class="le-content">
+                    <div class="le-parameter" v-for="(item,index) in form.temp_details" :key="index">
+                        <el-form-item label="楼层" label-width="82px" :key="index + '_name'">
+                            <el-input
+                                    v-model="item.level"
+                                    class="le-input--240"
+                                    placeholder="请输入楼层">
+                                <template slot="append">层</template>
+                            </el-input>
+                            <div class="le-prompt-text">示例：-1楼；-2楼；-3楼</div>
+                        </el-form-item>
+                        <el-form-item label="费用" label-width="82px" :key="index + '_value'">
+                            <el-input
+                                    v-model="item.money"
+                                    class="le-input--240"
+                                    placeholder="请输入费用">
+                                <template slot="append">元</template>
+                            </el-input>
+                            <div class="le-prompt-text">示例：5；10；20</div>
+                        </el-form-item>
+                        <div v-if="index > 0" class="le-deletion le-icon le-icon-cha2" @click="deletionParameter(index)"></div>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="pushParameter" plain>
+                        添加搬运
+                    </el-button>
+                </el-form-item>
+            </div>
         </el-form>
         <div class="le-cardpin">
             <el-button
@@ -59,7 +74,7 @@
                     :disabled="disabled"
                     :loading="loading && !disabled"
                     @click="submit">
-                保存
+                {{active >= 6 ? "保存" : "保存并下一步"}}
             </el-button>
         </div>
     </div>
@@ -102,7 +117,8 @@
                 },
                 loading: false,
                 disabled: false,
-                is_close: false
+                is_close: false,
+                active:0
             };
         },
         mounted() {
@@ -139,9 +155,21 @@
                             .then(res => {
                                 this.$message.success('保存成功');
                                 this.loading = false;
-                                this.$router.push({
-                                    path: '/goods/transportTemplate'
-                                });
+                                this.form =  {
+                                    temp_name: '',
+                                        temp_details: [
+                                        {
+                                            level: '',
+                                            money: ''
+                                        }
+                                    ]
+                                };
+                                this.active++;
+                                if (this.active >= 6) {
+                                    this.$router.push({
+                                        path: '/goods/transportTemplate'
+                                    });
+                                }
                             })
                             .catch(err => {
                                 if (err.data[0]) {
@@ -227,5 +255,8 @@
         .el-textarea__inner {
             border-color: #dcdfe6 !important;
         }
+    }
+    .box{
+        margin-top: 40px;
     }
 </style>
