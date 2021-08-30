@@ -179,7 +179,7 @@
                 title="物流信息"
                 :hide_cancel="true"
                 v-if="item.status >= 202 && item.freight"
-                :width="item.freight.type === 1 ? 740 : 285"
+                :width="item.freight.type === 2 ? 285 : 740"
                 module="order"
                 top="35vh"
                 :id="item.id + '_logistics_information'"

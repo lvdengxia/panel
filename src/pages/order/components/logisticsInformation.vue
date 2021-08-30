@@ -14,6 +14,30 @@
                 <logistics-step :list="list" v-if="state === 0"></logistics-step>
             </div>
         </template>
+        <template v-else-if="value.freight.type ===3">
+            <el-form label-width="210px" class="le-matter">
+                <el-form-item label="发货方式：">
+                    <span  class="le-text">沪上帮司机自配送</span>
+                </el-form-item>
+                <el-form-item label="物流状态">
+                    <span v-if="value.freight.drive_name===1" class="le-text">等待司机师傅接单</span>
+                    <span v-else-if="value.freight.drive_name===2" class="le-text">司机确认接单</span>
+                    <span v-else-if="value.freight.drive_name===3" class="le-text">确认装货完成</span>
+                    <span v-else-if="value.freight.drive_name===4" class="le-text">用户确认收货</span>
+                    <span v-else class="le-text">未知</span>
+                </el-form-item>
+            </el-form>
+        </template>
+        <template v-else-if="value.freight.type ===4">
+            <el-form label-width="210px" class="le-matter">
+                <el-form-item label="第三方物流司机师傅：">
+                    <span  class="le-text">{{value.freight.drive_name}}</span>
+                </el-form-item>
+                <el-form-item label="司机师傅联系方式：">
+                    <span  class="le-text">{{value.freight.drive_mobile}}</span>
+                </el-form-item>
+            </el-form>
+        </template>
         <el-form label-width="110px" class="le-matter" v-else>
             <el-form-item label="发货方式：">
                 <span  class="le-text">无需物流</span>
