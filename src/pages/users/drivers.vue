@@ -296,8 +296,8 @@
                 prop="plate_group"
                 min-width="150px">
           <template slot-scope="scope">
-            <div class="he-text" v-if="scope.row.plate_group === '1'">黄牌</div>
-            <div class="he-text" v-else-if="scope.row.plate_group === '2'">蓝牌</div>
+            <div class="he-text" v-if="scope.row.plate_group === 1">黄牌</div>
+            <div class="he-text" v-else-if="scope.row.plate_group === 2">蓝牌</div>
             <div class="he-text" v-else>未知</div>
           </template>
         </el-table-column>

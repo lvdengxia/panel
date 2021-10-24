@@ -74,7 +74,7 @@
                     :disabled="disabled"
                     :loading="loading && !disabled"
                     @click="submit">
-                {{active >= 6 ? "保存" : "保存并下一步"}}
+                {{active >= 10 ? "保存" : "保存并下一步"}}
             </el-button>
         </div>
     </div>
@@ -129,6 +129,11 @@
         },
         methods: {
             pushParameter() {
+                if (this.active === 1 || this.active === 3 ||
+                    this.active === 6 || this.active === 7){
+                    this.$message.error('电梯每层的价格都是一样的，无需重复添加');
+                    return;
+                }
                 this.form.temp_details.push({
                     level: '',
                     money: ''
@@ -149,7 +154,7 @@
                             method = 'post';
                         }
                         let data = this.$heshop.utils.deepClone(this.form);
-                        console.log(data);
+                        // console.log(data);
                         this.$heshop
                             .temp(method, data)
                             .then(res => {
@@ -165,7 +170,7 @@
                                     ]
                                 };
                                 this.active++;
-                                if (this.active >= 6) {
+                                if (this.active >= 10) {
                                     this.$router.push({
                                         path: '/goods/transportTemplate'
                                     });

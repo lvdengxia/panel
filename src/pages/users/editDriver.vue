@@ -26,7 +26,7 @@
                 <el-input clearable v-model="form.plate_number" class="he-searchInput">
                     <el-select v-model="form.plate_group" slot="prepend" placeholder="请选择">
                         <el-option
-                                v-for="item in [{value: '1',label: '黄牌'}, {value: '2',label: '蓝牌'}]"
+                                v-for="item in [{value: 0,label: '未知'},{value: 1,label: '黄牌'}, {value: 2,label: '蓝牌'}]"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
@@ -258,7 +258,9 @@ export default {
 
                     if (_this.$route.query.id) {
                         _this.$heshop.users('post', {id: _this.$route.query.id}, _this.form).then(function () {
-                            _this.cancel();
+                            _this.loading = false;
+                            _this.$message.success("修改成功");
+                            _this.cancel(_this.$route.query.id);
                         }).catch(function (error) {
                             _this.loading = false;
                             if (error.status === 403) {
@@ -295,10 +297,16 @@ export default {
                 }
             });
         },
-        cancel: function () {
-            this.$router.replace({
-                path: "/users/editDriver",
-            })
+        cancel: function (id = null) {
+            if (id !==null){
+                this.$router.push({
+                    path: "/users/driver",
+                })
+            } else{
+                this.$router.replace({
+                    path: "/users/editDriver",
+                })
+            }
         },
         getDetail: function (id) {
             let _this = this;

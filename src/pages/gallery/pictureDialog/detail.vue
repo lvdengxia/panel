@@ -6,7 +6,7 @@
                     <span>分组名称</span>
                 </div>
                 <div class="picture-selet__detail-group">
-                    <el-scrollbar :style="{height:'632px'}">
+                    <el-scrollbar :style="{height:limit>1?'332px':'536px'}">
                         <el-radio-group v-model="index">
                             <ul>
                                 <li>

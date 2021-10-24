@@ -202,7 +202,7 @@
                 })
                     .then(function () {
                         _this.$heshop
-                            .temp("delete", {id:id})
+                            .temp("delete", id)
                             .then(function () {
                                 _this.$delete(_this.list, index);
                                 if (_this.pagination.current > 1 && _this.list.length === 0) {
@@ -227,7 +227,7 @@
             delAll: function () {
                 let _this = this;
                 let newArr = this.checkList.map(function (item) {
-                    return item.id;
+                    return item.temp_id;
                 });
                 this.$confirm("是否确认删除选中搬运模板？", {
                     confirmButtonText: "确定",
@@ -237,7 +237,7 @@
                 })
                     .then(function () {
                         _this.$heshop
-                            .temp("delete", {ids:newArr})
+                            .temp("delete", newArr)
                             .then(function () {
                                 let num = _this.list.length - newArr.length;
                                 if (_this.pagination.current > 1 && num === 0) {
