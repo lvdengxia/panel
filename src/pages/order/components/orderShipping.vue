@@ -66,6 +66,17 @@
                 ></el-input>
             </el-form-item>
         </template>
+
+        <el-form-item label="物流管理员" prop="storekeeper">
+            <el-select v-model="form.storekeeper" placeholder="请选择">
+                <el-option
+                        v-for="item in storekeepers"
+                        :key="item.id"
+                        :label="item.name + ' | ' + item.tel"
+                        :value="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
     </el-form>
 </template>
 <script>
@@ -88,6 +99,7 @@
                     driver_id: '',
                     drive_name: '',
                     drive_mobile: '',
+                    storekeeper: '',
                 },
                 rules: {
                     freight_sn: [
@@ -110,10 +122,14 @@
                                 }
                             }, trigger: 'blur'
                         }
+                    ],
+                    storekeeper: [
+                        {required: true, message: '请输入司机名称', trigger: 'change'}
                     ]
                 },
                 express: [],
                 drivers: [],
+                storekeepers:[]
             }
         },
         methods: {
@@ -199,6 +215,9 @@
                 _this.drivers = res.res.map(item => {
                     return {value: item.name, label: item.id};
                 });
+            });
+            this.$heshop.ckdaili("get").then((res) => {
+                _this.storekeepers = res.res;
             });
         },
     };

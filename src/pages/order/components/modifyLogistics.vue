@@ -8,7 +8,7 @@
         </el-form-item>
         <el-form-item label="发货方式">
             <el-radio-group v-model="form.type">
-                <el-radio :label="1">自己联系快递</el-radio>
+                <el-radio :label="1">自己联系快递111</el-radio>
                 <el-radio :label="2">无需物流</el-radio>
                 <el-radio :label="3">分配给司机</el-radio>
                 <el-radio :label="4">货拉拉</el-radio>
@@ -55,6 +55,17 @@
                 ></el-input>
             </el-form-item>
         </template>
+
+        <el-form-item label="物流管理员" prop="storekeeper">
+            <el-select v-model="form.storekeeper" placeholder="请选择">
+                <el-option
+                        v-for="item in storekeepers"
+                        :key="item.id"
+                        :label="item.name + ' | ' + item.tel"
+                        :value="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
     </el-form>
 </template>
 <script>
@@ -76,6 +87,8 @@
                     driver_id: '',
                     drive_name: '',
                     drive_mobile: '',
+                    storekeeper:''
+
                 },
                 rules: {
                     freight_sn: [
@@ -98,12 +111,16 @@
                                 }
                             }, trigger: 'blur'
                         }
+                    ],
+                    storekeeper:[
+                        {required: true, message: '请选择物流管理员', trigger: 'change'}
                     ]
                 },
                 express: [],
                 drivers: [],
                 loading: false,
-                timeout: null
+                timeout: null,
+                storekeepers:[]
             }
         },
         methods: {
@@ -195,6 +212,10 @@
                 _this.drivers = res.res.map(item => {
                     return {value: item.name, label: item.id};
                 });
+            });
+
+            this.$heshop.ckdaili("get").then((res) => {
+                _this.storekeepers = res.res;
             });
         }
     };

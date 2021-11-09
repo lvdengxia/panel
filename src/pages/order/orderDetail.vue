@@ -8,7 +8,7 @@
     </el-breadcrumb>
     <el-row class="le-line"></el-row>
     <el-row>
-      <el-col :span="8">
+      <el-col :span="6">
         <div class="le-card he-do-info">
           <div style="height: 150px">
             <div class="he-status">{{ detail.status | orderStatus }}</div>
@@ -106,7 +106,7 @@
           </popconfirm>
         </div>
       </el-col>
-      <el-col :span="16">
+      <el-col :span="18">
         <div class="le-card he-step flex align-center justify-around">
           <div class="he-buyer-orders">
             <div
@@ -174,25 +174,26 @@
               </div>
             </div>
             <template v-if="!isAfterOver">
+              <!--卖家发货-->
               <div class="he-transition">
                 <div class="he-dot-bar el-row--flex is-justify-space-around">
                   <div
                     class="he-dots"
-                    :class="detail.status >= 202 ? 'he-select' : 'he-noSelect'"
+                    :class="detail.status >= 202 && detail.freight.distribution_status === 1 ? 'he-select' : 'he-noSelect'"
                   ></div>
                   <div
                     class="he-dots"
-                    :class="detail.status >= 202 ? 'he-select' : 'he-noSelect'"
+                    :class="detail.status >= 202 && detail.freight.distribution_status === 1 ? 'he-select' : 'he-noSelect'"
                   ></div>
                   <div
                     class="he-dots"
-                    :class="detail.status >= 202 ? 'he-select' : 'he-noSelect'"
+                    :class="detail.status >= 202 && detail.freight.distribution_status === 1 ? 'he-select' : 'he-noSelect'"
                   ></div>
                 </div>
                 <div
                   class="he-row"
                   :class="
-                    detail.status >= 202 ? 'he-row-select' : 'he-row-noSelect'
+                    detail.status >= 202 && detail.freight.distribution_status === 1 ? 'he-row-select' : 'he-row-noSelect'
                   "
                 ></div>
               </div>
@@ -200,7 +201,7 @@
                 <div
                   class="he-img__box el-row--flex is-justify-center is-align-middle"
                   :class="
-                    detail.status === 202
+                    detail.status === 202 && detail.freight.distribution_status === 1
                       ? 'he-img__select'
                       : detail.status >= 203
                       ? 'he-img__active'
@@ -210,11 +211,138 @@
                   <he-icon class="img" type="le-icon-delivery"></he-icon>
                 </div>
                 <div class="he-title">卖家发货</div>
-                <div class="he-time" v-if="detail.status >= 202">
+                <div class="he-time" v-if="detail.status >= 202 && detail.freight.distribution_status === 1 ">
                   {{ detail.send_time | getDay }}<br />
                   {{ detail.send_time | getHour }}<br />
                 </div>
               </div>
+              <!--司机确认接单-->
+              <div class="he-transition">
+                <div class="he-dot-bar el-row--flex is-justify-space-around">
+                  <div
+                          class="he-dots"
+                          :class="detail.status >= 202 && detail.freight.distribution_status === 2 ? 'he-select' : 'he-noSelect'"
+                  ></div>
+                  <div
+                          class="he-dots"
+                          :class="detail.status >= 202 && detail.freight.distribution_status === 2 ? 'he-select' : 'he-noSelect'"
+                  ></div>
+                  <div
+                          class="he-dots"
+                          :class="detail.status >= 202 && detail.freight.distribution_status === 2 ? 'he-select' : 'he-noSelect'"
+                  ></div>
+                </div>
+                <div
+                        class="he-row"
+                        :class="
+                    detail.status >= 202 && detail.freight.distribution_status === 2 ? 'he-row-select' : 'he-row-noSelect'
+                  "
+                ></div>
+              </div>
+              <div class="he-buyer-shipment">
+                <div
+                        class="he-img__box el-row--flex is-justify-center is-align-middle"
+                        :class="
+                    detail.status === 202 && detail.freight.distribution_status === 2
+                      ? 'he-img__select'
+                      : detail.status >= 203
+                      ? 'he-img__active'
+                      : 'he-img__noActive'
+                  "
+                >
+                  <he-icon class="img" type="le-icon-delivery"></he-icon>
+                </div>
+                <div class="he-title">司机接单</div>
+                <div class="he-time" v-if="detail.status >= 202 && detail.freight.distribution_status === 2 ">
+                  {{ detail.send_time | getDay }}<br />
+                  {{ detail.send_time | getHour }}<br />
+                </div>
+              </div>
+              <!--司机装货完成-->
+              <div class="he-transition">
+                <div class="he-dot-bar el-row--flex is-justify-space-around">
+                  <div
+                          class="he-dots"
+                          :class="detail.status >= 202 && detail.freight.distribution_status === 3 ? 'he-select' : 'he-noSelect'"
+                  ></div>
+                  <div
+                          class="he-dots"
+                          :class="detail.status >= 202 && detail.freight.distribution_status === 3 ? 'he-select' : 'he-noSelect'"
+                  ></div>
+                  <div
+                          class="he-dots"
+                          :class="detail.status >= 202 && detail.freight.distribution_status === 3 ? 'he-select' : 'he-noSelect'"
+                  ></div>
+                </div>
+                <div
+                        class="he-row"
+                        :class="
+                    detail.status >= 202 && detail.freight.distribution_status === 3 ? 'he-row-select' : 'he-row-noSelect'
+                  "
+                ></div>
+              </div>
+              <div class="he-buyer-shipment">
+                <div
+                        class="he-img__box el-row--flex is-justify-center is-align-middle"
+                        :class="
+                    detail.status === 202 && detail.freight.distribution_status === 3
+                      ? 'he-img__select'
+                      : detail.status >= 203
+                      ? 'he-img__active'
+                      : 'he-img__noActive'
+                  "
+                >
+                  <he-icon class="img" type="le-icon-delivery"></he-icon>
+                </div>
+                <div class="he-title">装货完成</div>
+                <div class="he-time" v-if="detail.status >= 202 && detail.freight.distribution_status === 3 ">
+                  {{ detail.send_time | getDay }}<br />
+                  {{ detail.send_time | getHour }}<br />
+                </div>
+              </div>
+              <!--司机确认送达-->
+              <div class="he-transition">
+                <div class="he-dot-bar el-row--flex is-justify-space-around">
+                  <div
+                          class="he-dots"
+                          :class="detail.status >= 202 && detail.freight.distribution_status === 4 ? 'he-select' : 'he-noSelect'"
+                  ></div>
+                  <div
+                          class="he-dots"
+                          :class="detail.status >= 202 && detail.freight.distribution_status === 4 ? 'he-select' : 'he-noSelect'"
+                  ></div>
+                  <div
+                          class="he-dots"
+                          :class="detail.status >= 202 && detail.freight.distribution_status === 4 ? 'he-select' : 'he-noSelect'"
+                  ></div>
+                </div>
+                <div
+                        class="he-row"
+                        :class="
+                    detail.status >= 202 && detail.freight.distribution_status === 4 ? 'he-row-select' : 'he-row-noSelect'
+                  "
+                ></div>
+              </div>
+              <div class="he-buyer-shipment">
+                <div
+                        class="he-img__box el-row--flex is-justify-center is-align-middle"
+                        :class="
+                    detail.status === 202 && detail.freight.distribution_status === 4
+                      ? 'he-img__select'
+                      : detail.status >= 203
+                      ? 'he-img__active'
+                      : 'he-img__noActive'
+                  "
+                >
+                  <he-icon class="img" type="le-icon-delivery"></he-icon>
+                </div>
+                <div class="he-title">司机送达</div>
+                <div class="he-time" v-if="detail.status >= 202 && detail.freight.distribution_status === 4 ">
+                  {{ detail.send_time | getDay }}<br />
+                  {{ detail.send_time | getHour }}<br />
+                </div>
+              </div>
+              <!--交易成功-->
               <div class="he-transition">
                 <div class="he-dot-bar el-row--flex is-justify-space-around">
                   <div
@@ -436,8 +564,16 @@
               <div>
                 <span class="he-logistics__title">发货方式：</span>
                 <span class="he-logistics__value">{{
-                  detail.freight.type == 1 ? "自己联系快递" : "无需物流"
+                  detail.freight.type|getFreightType
                 }}</span>
+              </div>
+              <div v-if="detail.freight.type == 3">
+                <span class="he-logistics__title">司机名称：</span>
+                <span class="he-logistics__value">{{detail.freight.drive_name}}</span>
+              </div>
+              <div v-if="detail.freight.type == 3">
+                <span class="he-logistics__title">联系方式：</span>
+                <span class="he-logistics__value">{{detail.freight.drive_mobile}}</span>
               </div>
               <div
                 style="display: inline-block"
@@ -481,6 +617,22 @@
                 {{ logistics.message }}
               </div>
               <logistics-step :list="logistics.list"></logistics-step>
+            </div>
+          </el-col>
+          <el-col
+                  :span="18"
+                  class="he-logistics-details"
+                  v-if="detail.freight.type == 3"
+          >
+            <div class="he-title">物流详情</div>
+            <div class="he-info__content">
+              <el-image v-if="detail.freight.distribution_img"
+                        v-for="(item,index) in detail.freight.distribution_img"
+                        :key="index"
+                      style="width: 160px; height: 160px; margin-right: 10px"
+                      :src=item
+                      :preview-src-list="[item]">
+              </el-image>
             </div>
           </el-col>
         </el-row>
@@ -943,6 +1095,20 @@ export default {
         return "售后中";
       }
     },
+    getFreightType: function (type) {
+        switch (type) {
+            case 1:
+                return "自己联系快递";
+            case 2:
+                return "无需物流";
+            case 3:
+                return "分配给司机";
+            case 4:
+                return "货拉拉";
+            default:
+                return "— —";
+        }
+    }
   },
 };
 </script>
